@@ -25,10 +25,10 @@ class PostController extends Controller
         return DataTables::of($posts)
             // ->addIndexColumn()
             ->addColumn('title', function($post) {
-                return '<strong>' . $post->title . '</strong>';
+                return '<strong data-id="'.$post->uuid.'">' . $post->title . '</strong>';
             })
             ->addColumn('action', function($post) {
-                return '1';
+                return '<input type="hidden" class="uuid" value="'.$post->uuid.'">';
             })
             ->addColumn('description', function($post) {
                 return Str::limit($post->content, 50, '...');

@@ -82,7 +82,21 @@
     });
 
     posttbl.on('dblclick', 'tbody td.editable', function (e){
-        $(this).html('<input type="text" class="form-control" value="'+$(this).text()+'">');
+        var uuid = $(this).find('strong').data('id');
+        $(this).html('<input type="text" class="form-control" value="'+$(this).text()+'"><input type="hidden" class="uuid" value="'+uuid+'">');
+
+        $(this).find('input.form-control').focus();
+    });
+
+    posttbl.on('blur', 'tbody td.editable input.form-control', function (e){
+        var value = $(this).val();
+        // var id = $(this).closest('td').find('input.uuid').val();
+
+        // alert(id);
+
+        var uuid = $(this).siblings('input.uuid').val();
+        $(this).closest('td').html('<strong data-id="'+uuid+'">'+value+'</strong>');
+
     });
 </script>
 @endsection
