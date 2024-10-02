@@ -65,7 +65,8 @@
             },
             {
                 "data": "title",
-                "name": "title"
+                "name": "title",
+                "className": "editable"
             },
             {
                 "data": "description",
@@ -78,6 +79,10 @@
                 "data": "action"
             },
         ]
+    });
+
+    posttbl.on('dblclick', 'tbody td.editable', function (e){
+        $(this).html('<input type="text" class="form-control" value="'+$(this).text()+'">');
     });
 </script>
 @endsection
