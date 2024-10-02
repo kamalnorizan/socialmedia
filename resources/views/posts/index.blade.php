@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
 @section('head')
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.7/css/dataTables.dataTables.min.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/3.0.3/css/responsive.dataTables.css" />
 @endsection
 
 @section('content')
@@ -24,12 +25,15 @@
 @endsection
 
 @section('script')
-<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.js"></script>
+<script type="text/javascript" src="//cdn.datatables.net/2.1.7/js/dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/responsive/3.0.3/js/dataTables.responsive.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/responsive/3.0.3/js/responsive.dataTables.js"></script>
 
 <script>
     var posttbl= $('#posttbl').DataTable({
         "processing": true,
         "serverSide": true,
+        "responsive": true,
         "ajax": {
             "type": "POST",
             "url": "{{ route('posts.ajaxloadposts') }}",
