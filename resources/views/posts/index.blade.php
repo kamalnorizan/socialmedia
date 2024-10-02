@@ -98,5 +98,17 @@
         $(this).closest('td').html('<strong data-id="'+uuid+'">'+value+'</strong>');
 
     });
+
+    $(document).on("mouseenter",".more",function (e) {
+        var fullText = $(this).closest('td').find('.data').data('full');
+        $(this).closest('td').find('.data').html(fullText);
+        // alert(fullText);
+    });
+
+    $(document).on("click",".less",function (e) {
+        var less = $(this).closest('td').find('.data').data('less');
+        $(this).closest('td').find('.data').html(less);
+        // alert(fullText);
+    });
 </script>
 @endsection

@@ -31,12 +31,13 @@ class PostController extends Controller
                 return '<input type="hidden" class="uuid" value="'.$post->uuid.'">';
             })
             ->addColumn('description', function($post) {
-                return Str::limit($post->content, 50, '...');
+                $data = '<span class="data" data-full="'.$post->content.'<span class=\'less\'>See Less</span>" data-less="'.Str::limit($post->content, 50, "<span class='more'>... See More</span>").'">'.Str::limit($post->content, 50, '<span class="more">... See More</span>').'</span>';
+                return $data;
             })
             ->addColumn('comments', function($post) {
                 return $post->comments->count();
             })
-            ->rawColumns(['action','title'])
+            ->rawColumns(['action','title','description'])
             ->make(true);
     }
 
