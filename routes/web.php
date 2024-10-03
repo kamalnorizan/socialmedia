@@ -22,6 +22,7 @@ Route::get('/', function () {
 });
 
 
+Route::get('/posts/editor', [PostController::class, 'editor'])->name('posts.editor');
 Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
 Route::post('/posts/ajaxloadposts', [PostController::class, 'ajaxloadposts'])->name('posts.ajaxloadposts');
 

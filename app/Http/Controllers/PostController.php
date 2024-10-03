@@ -96,6 +96,10 @@ class PostController extends Controller
         // return redirect()->route('posts.index');
     }
 
+    function editor() {
+        return view('posts.editor');
+    }
+
     public function updateauthor(Request $request, Post $uuid)
     {
         $post = $uuid;
