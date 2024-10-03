@@ -90,12 +90,27 @@
 
     posttbl.on('blur', 'tbody td.editable input.form-control', function (e){
         var value = $(this).val();
-        // var id = $(this).closest('td').find('input.uuid').val();
-
-        // alert(id);
-
         var uuid = $(this).siblings('input.uuid').val();
-        $(this).closest('td').html('<strong data-id="'+uuid+'">'+value+'</strong>');
+        var url = "{{ route('posts.update',['uuid'=>'000']) }}";
+        url = url.replace('000',uuid);
+        var elem = $(this);
+        $.ajax({
+            type: "post",
+            url: '{{url("posts")}}/'+uuid,
+            data: {
+                _token: "{{ csrf_token() }}",
+                uuid: uuid,
+                value: value
+            },
+            dataType: "json",
+            success: function (response) {
+                if(response.status == 'success'){
+                    $(elem).closest('td').html('<strong data-id="'+uuid+'">'+value+'</strong>');
+                }else{
+                    alert(response.message);
+                }
+            }
+        });
 
     });
 
@@ -108,7 +123,6 @@
     $(document).on("click",".less",function (e) {
         var less = $(this).closest('td').find('.data').data('less');
         $(this).closest('td').find('.data').html(less);
-        // alert(fullText);
     });
 </script>
 @endsection

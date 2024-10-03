@@ -82,15 +82,13 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePostRequest $request, Post $post)
+    public function update(Request $request, Post $uuid)
     {
-
-        $post->title = $request->title;
-        $post->user_id = auth()->user()->id;
-        $post->content = $request->content;
+        $post = $uuid;
+        $post->title = $request->value;
         $post->save();
-
-        return redirect()->route('posts.index');
+        return response()->json(['status'=>'success','success' => 'Post updated successfully']);
+        // return redirect()->route('posts.index');
     }
 
     /**

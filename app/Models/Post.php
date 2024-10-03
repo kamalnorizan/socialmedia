@@ -20,6 +20,11 @@ class Post extends Model
 
     protected $guarded = ['id'];
 
+    function getRouteKeyName()
+    {
+        return 'uuid';
+    }
+
     // Relhasm
     public function comments()
     {
