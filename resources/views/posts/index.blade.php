@@ -12,6 +12,7 @@
             <thead>
                 <tr>
                     <th>No.</th>
+                    <th>Author</th>
                     <th>Title</th>
                     <th>Desc</th>
                     <th>Comments</th>
@@ -22,6 +23,10 @@
         </table>
     </div>
 </div>
+
+  <select class="form-control">
+
+  </select>
 @endsection
 
 @section('script')
@@ -64,6 +69,11 @@
                 "orderable": false
             },
             {
+                "data": "author",
+                "name": "user.name",
+                "className": "editableAuthor"
+            },
+            {
                 "data": "title",
                 "name": "title",
                 "className": "editable"
@@ -88,6 +98,21 @@
         $(this).find('input.form-control').focus();
     });
 
+    posttbl.on('dblclick', 'tbody td.editableAuthor', function (e){
+        var uuid = $(this).closest('tr').find('strong.title').data('id');
+        var user_id = $(this).find('strong.author').data('id');
+        var select = '<select id="selectCreated" class="form-control">'
+        @foreach($users as $key=>$user)
+        select += '<option value="{{$key}}">{{$user}}</option>';
+        @endforeach
+        select += '</select>';
+
+        $(this).html(select);
+        $('#selectCreated').val(user_id).change();
+
+        $(this).find('select.form-control').focus();
+    });
+
     posttbl.on('blur', 'tbody td.editable input.form-control', function (e){
         var value = $(this).val();
         var uuid = $(this).siblings('input.uuid').val();
@@ -106,6 +131,32 @@
             success: function (response) {
                 if(response.status == 'success'){
                     $(elem).closest('td').html('<strong data-id="'+uuid+'">'+value+'</strong>');
+                }else{
+                    alert(response.message);
+                }
+            }
+        });
+
+    });
+
+    posttbl.on('blur', 'tbody td.editableAuthor select.form-control', function (e){
+        var value = $(this).val();
+        var uuid = $(this).closest('tr').find('strong.title').data('id');
+        var url = "{{ route('posts.updateauthor',['uuid'=>'000']) }}";
+        url = url.replace('000',uuid);
+        var elem = $(this);
+        $.ajax({
+            type: "post",
+            url: url,
+            data: {
+                _token: "{{ csrf_token() }}",
+                uuid: uuid,
+                value: value
+            },
+            dataType: "json",
+            success: function (response) {
+                if(response.status == 'success'){
+                    $(elem).closest('td').html('<strong data-id="'+response.user_id+'">'+response.value+'</strong>');
                 }else{
                     alert(response.message);
                 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Requests\StorePostRequest;
@@ -16,16 +17,20 @@ class PostController extends Controller
      */
     public function index()
     {
-        return view('posts.index');
+        $users = User::pluck('name', 'id');
+        return view('posts.index',compact('users'));
     }
 
     function ajaxloadposts(Request $request) {
-        $posts = Post::query();
+        $posts = Post::with('user');
 
         return DataTables::of($posts)
             // ->addIndexColumn()
+            ->addColumn('author', function($post) {
+                return '<strong data-id="'.$post->user->id.'" class="author">' . $post->user->name . '</strong>';
+            })
             ->addColumn('title', function($post) {
-                return '<strong data-id="'.$post->uuid.'">' . $post->title . '</strong>';
+                return '<strong data-id="'.$post->uuid.'" class="title">' . $post->title . '</strong>';
             })
             ->addColumn('action', function($post) {
                 return '<input type="hidden" class="uuid" value="'.$post->uuid.'">';
@@ -37,7 +42,7 @@ class PostController extends Controller
             ->addColumn('comments', function($post) {
                 return $post->comments->count();
             })
-            ->rawColumns(['action','title','description'])
+            ->rawColumns(['author','action','title','description'])
             ->make(true);
     }
 
@@ -88,6 +93,19 @@ class PostController extends Controller
         $post->title = $request->value;
         $post->save();
         return response()->json(['status'=>'success','success' => 'Post updated successfully']);
+        // return redirect()->route('posts.index');
+    }
+
+    public function updateauthor(Request $request, Post $uuid)
+    {
+        $post = $uuid;
+        $post->user_id = $request->value;
+        $post->save();
+
+        $data['user_id'] = $post->user->id;
+        $data['value'] = $post->user->name;
+        $data['status'] = 'success';
+        return response()->json($data);
         // return redirect()->route('posts.index');
     }
 

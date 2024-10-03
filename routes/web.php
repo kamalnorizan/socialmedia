@@ -31,6 +31,7 @@ Route::post('/posts/ajaxloadposts', [PostController::class, 'ajaxloadposts'])->n
     Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
     Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('posts.edit');
     Route::post('/posts/{uuid}', [PostController::class, 'update'])->name('posts.update');
+    Route::post('/posts/updateauthor/{uuid}', [PostController::class, 'updateauthor'])->name('posts.updateauthor');
     Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
 // });
 
