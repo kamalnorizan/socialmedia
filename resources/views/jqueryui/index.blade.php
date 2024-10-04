@@ -34,6 +34,10 @@
             height: 100vh;
             background-color: red;
         }
+
+        #selectable .ui-selected {
+            background: #ecd38f;
+        }
     </style>
 </head>
 
@@ -47,9 +51,18 @@
             <h1>Drop here</h1>
         </div>
 
-        <ul>
-            
+
+        <ul id="selectable">
+            <li>item 1</li>
+            <li>item 2</li>
+            <li>item 3</li>
+            <li>item 4</li>
+            <li>item 5</li>
+            <li>item 6</li>
+            <li>item 7</li>
+            <li>item 8</li>
         </ul>
+        <button type="button" id="btnSubmit">Submit</button>
     </div>
 
 
@@ -74,6 +87,23 @@
                 alert('dropped');
             }
         });
+
+        $('#selectable').selectable({
+
+        });
+
+        $("#btnSubmit").click(function (e) {
+            e.preventDefault();
+            var selectedItems = $('#selectable .ui-selected');
+            var selectedValues = [];
+            selectedItems.each(function (index, item) {
+                selectedValues.push($(item).text());
+            });
+
+            console.log(selectedValues);
+        });
+
+
     </script>
 </body>
 
