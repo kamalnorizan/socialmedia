@@ -26,6 +26,8 @@ Route::get('/posts/editor', [PostController::class, 'editor'])->name('posts.edit
 Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
 Route::post('/posts/ajaxloadposts', [PostController::class, 'ajaxloadposts'])->name('posts.ajaxloadposts');
 
+Route::get('jqueryui', [JqueryUiController::class,'index'])->name('jqueryui.index');
+
 //routemi
 // Route::middleware(['auth'])->group(function () {
     Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
