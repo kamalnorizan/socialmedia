@@ -11,16 +11,27 @@
     <link rel="stylesheet" href="{{ asset('jquery-ui-1.14.0/jquery-ui.css') }}">
     <style>
         .draggableDiv {
-            width: 200px;
-            height: 200px;
+            width: 40ex;
+            height: 40px;
             background-color: lightblue;
             border: 1px solid black;
             margin: 20px;
+            z-index: 100;
+        }
+
+        .targetDiv{
+            position: absolute;
+            bottom: 5px;
+            left: 200px;
+            width: 40ex;
+            height: 40px;
+            background-color: lightgreen;
+            border: 1px solid black;
         }
 
         #container {
             width: 500px;
-            height: 500px;
+            height: 100vh;
             background-color: red;
         }
     </style>
@@ -29,8 +40,16 @@
 <body>
     <div id="container">
         <div class="draggableDiv">
-            <h1>Hello-Bootstrap</h1>
+            <h1>Drag me</h1>
         </div>
+
+        <div class="targetDiv">
+            <h1>Drop here</h1>
+        </div>
+
+        <ul>
+            
+        </ul>
     </div>
 
 
@@ -46,9 +65,14 @@
     <script src="{{ asset('jquery-ui-1.14.0/jquery-ui.min.js') }}"></script>
 
     <script>
-        $('h1').text('Drag me');
         $('.draggableDiv').draggable({
             containment: '#container'
+        });
+
+        $('.targetDiv').droppable({
+            drop: function(event, ui){
+                alert('dropped');
+            }
         });
     </script>
 </body>
