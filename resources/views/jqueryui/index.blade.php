@@ -63,6 +63,21 @@
             <li>item 8</li>
         </ul>
         <button type="button" id="btnSubmit">Submit</button>
+
+        <hr>
+        <h2>Sortable</h2>
+        <ul id="sortable">
+            <li data-id="101">List 1</li>
+            <li data-id="102">List 2</li>
+            <li data-id="103">List 3</li>
+            <li data-id="104">List 4</li>
+            <li data-id="105">List 5</li>
+            <li data-id="106">List 6</li>
+            <li data-id="107">List 7</li>
+            <li data-id="108">List 8</li>
+        </ul>
+        <button type="button" id="btnSortable">Submit</button>
+
     </div>
 
 
@@ -92,6 +107,10 @@
 
         });
 
+        $('#sortable').sortable({
+
+        });
+
         $("#btnSubmit").click(function (e) {
             e.preventDefault();
             var selectedItems = $('#selectable .ui-selected');
@@ -103,6 +122,16 @@
             console.log(selectedValues);
         });
 
+        $("#btnSortable").click(function (e) {
+            e.preventDefault();
+            var sortedItems = $('#sortable li');
+            var sortedValues = [];
+            sortedItems.each(function (index, item) {
+                sortedValues.push($(item).data('id'));
+            });
+
+            console.log(sortedValues);
+        });
 
     </script>
 </body>
