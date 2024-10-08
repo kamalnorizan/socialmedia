@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\JqueryUiController;
+use App\Http\Controllers\Google2FaController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,6 +23,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+Route::get('google2fa/enable', [Google2FaController::class,'index'])->name('google2fa.register');
+Route::get('google2fa/verifyForm', [Google2FaController::class,'verifyForm'])->name('google2fa.verifyForm');
+Route::get('google2fa/sendmail', [Google2FaController::class,'sendmail'])->name('google2fa.sendmail');
+Route::get('google2fa/resetandregister/{user}', [Google2FaController::class,'resetandregister'])->name('google2fa.resetandregister');
+Route::post('google2fa/verify', [Google2FaController::class,'verify'])->name('google2fa.verify');
+Route::get('google2fa/registration', [Google2FaController::class,'completeregistration'])->name('complete.registration');
 
 Route::get('/posts/editor', [PostController::class, 'editor'])->name('posts.editor');
 Route::get('/posts', [PostController::class, 'index'])->name('posts.index');

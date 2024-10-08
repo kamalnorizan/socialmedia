@@ -27,7 +27,7 @@ class PostController extends Controller
         return DataTables::of($posts)
             // ->addIndexColumn()
             ->addColumn('author', function($post) {
-                return '<strong data-id="'.$post->user->id.'" class="author">' . $post->user->name . '</strong>';
+                return '<strong data-id="'. $post->user ? $post->user->id : ''.'" class="author">' . $post->user->name . '</strong>';
             })
             ->addColumn('title', function($post) {
                 return '<strong data-id="'.$post->uuid.'" class="title">' . $post->title . '</strong>';

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
@@ -36,5 +38,56 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    public function showLoginForm(Request $request)
+    {
+        $request->session()->forget('2fa:user_id');
+        $request->session()->forget('registration_data');
+        return view('auth.login');
+    }
+
+    public function login(Request $request)
+    {
+        $this->validate($request, [
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        $credentials = [
+            'email' => $request->email,
+            'password' => $request->password
+        ];
+
+        if (method_exists($this, 'hasTooManyLoginAttempts') &&
+            $this->hasTooManyLoginAttempts($request)) {
+            $this->fireLockoutEvent($request);
+
+            return $this->sendLockoutResponse($request);
+        }
+
+        if (Auth::validate($credentials)) {
+            $user = Auth::getProvider()->retrieveByCredentials($credentials);
+
+            $request->session()->put('2fa:user_id', $user->uuid);
+
+            if ($user->first_time_login) {
+                return redirect()->route('google2fa.register');
+            } else {
+                return redirect()->route('google2fa.verifyForm');
+            }
+        }
+
+        // if ($this->attemptLogin($request)) {
+        //     if ($request->hasSession()) {
+        //         $request->session()->put('auth.password_confirmed_at', time());
+        //     }
+
+        //     return $this->sendLoginResponse($request);
+        // }
+
+        $this->incrementLoginAttempts($request);
+
+        return $this->sendFailedLoginResponse($request);
     }
 }

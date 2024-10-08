@@ -43,6 +43,11 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    function getRouteKeyName()
+    {
+        return 'uuid';
+    }
+
     public function posts()
     {
         return $this->hasMany(Post::class, 'user_id', 'id');

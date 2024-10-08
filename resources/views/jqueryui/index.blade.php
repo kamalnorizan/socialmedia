@@ -121,15 +121,16 @@
 
             console.log(selectedValues);
         });
-
+        var sortedValues = [];
         $("#btnSortable").click(function (e) {
             e.preventDefault();
             var sortedItems = $('#sortable li');
-            var sortedValues = [];
+
             sortedItems.each(function (index, item) {
                 sortedValues.push($(item).data('id'));
             });
 
+            /
             console.log(sortedValues);
         });
 
