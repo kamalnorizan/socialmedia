@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
@@ -65,16 +66,28 @@ class LoginController extends Controller
 
             return $this->sendLockoutResponse($request);
         }
+        if(env('APP_DEBUG') ) {
+            if(Auth::attempt($credentials)) {
+                $user = Auth::getProvider()->retrieveByCredentials($credentials);
+                Auth::login($user);
+                return redirect()->route('home');
+            }
+        }else{
+            if (Auth::validate($credentials)) {
+                $user = Auth::getProvider()->retrieveByCredentials($credentials);
 
-        if (Auth::validate($credentials)) {
-            $user = Auth::getProvider()->retrieveByCredentials($credentials);
-
-            $request->session()->put('2fa:user_id', $user->uuid);
-
-            if ($user->first_time_login) {
-                return redirect()->route('google2fa.register');
-            } else {
-                return redirect()->route('google2fa.verifyForm');
+                if(Cookie::get('trustdevice') == $user->uuid) {
+                    Auth::login($user);
+                    return redirect()->route('home');
+                }else{
+                    $request->session()->put('2fa:user_id', $user->uuid);
+                    Cookie::queue(Cookie::forget('trustdevice'));
+                    if ($user->first_time_login) {
+                        return redirect()->route('google2fa.register');
+                    } else {
+                        return redirect()->route('google2fa.verifyForm');
+                    }
+                }
             }
         }
 

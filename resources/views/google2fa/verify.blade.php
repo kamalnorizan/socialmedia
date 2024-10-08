@@ -37,7 +37,16 @@
                         @enderror
                     </div>
                 </div>
-
+                <div class="row mb-2">
+                    <div class="col-md-12">
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" name="trustThisDevice" id="trustThisDevice" value="1">
+                            Trust This Device
+                          </label>
+                        </div>
+                    </div>
+                </div>
                 <div class="row mb-0">
                     <div class="d-grid gap-2">
                         <button type="submit" class="btn btn-primary">

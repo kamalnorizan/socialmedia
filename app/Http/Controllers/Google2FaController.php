@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Auth;
+use App\Models\User;
 use Illuminate\Http\Request;
 use PragmaRX\Google2FA\Google2FA;
 use App\Notifications\ResetGoogle2fa;
+use Illuminate\Support\Facades\Cookie;
+
 class Google2FaController extends Controller
 {
     function index(Request $request)
@@ -87,11 +89,21 @@ class Google2FaController extends Controller
             $valid = $google2fa->verifyKey($user->google2fa_secret, $request->one_time_password);
 
             if ($valid) {
+                if($request->has('trustThisDevice') && $request->trustThisDevice == '1') {
+                   $cookie = cookie('trustdevice', $user->uuid, 60 * 24 * 30);
+                }
                 $request->session()->forget('2fa:user_id');
                 Auth::login($user);
                 $request->session()->remove('2fa:user_id');
                 $request->session()->remove('registration_data');
-                return redirect()->route('home');
+
+                $response = redirect()->route('home');
+
+                if (isset($cookie)) {
+                    return $response->withCookie($cookie);
+                }
+
+                return $response;
             }
         }
 
